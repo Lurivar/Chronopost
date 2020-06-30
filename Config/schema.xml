@@ -12,7 +12,7 @@
         <column name="label_directory" type="LONGVARCHAR" />
         <column name="label_number" type="LONGVARCHAR" />
 
-        <foreign-key foreignTable="order" name="fk_order_id" onDelete="CASCADE" onUpdate="RESTRICT">
+        <foreign-key foreignTable="order" name="fk_chronopost_pickup_point_order_order_id" onDelete="CASCADE" onUpdate="RESTRICT">
             <reference foreign="id" local="order_id" />
         </foreign-key>
     </table>

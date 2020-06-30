@@ -40,7 +40,7 @@
                 <div class="tab-content">
 
                     <div id="configure"  class="tab-pane {if $tab eq "configure"}active{/if} form-container">
-                        {include file = "ChronopostPickupPointConst/ChronopostAdvancedConfig.html"}
+                        {include file = "ChronopostPickupPoint/ChronopostPickupPointAdvancedConfig.html"}
                     </div>
 
                     <div id="export"  class="tab-pane {if $tab eq "export"}active{/if} form-container">
@@ -69,7 +69,7 @@
                                                     <td class="text-center">{$LABEL_DIR}</td>
                                                     <td class="text-center">{$LABEL_NBR}</td>
                                                     <td class="actions text-center">
-                                                        <a class="btn btn-default btn-xs js-export-download" title="{intl l='Download this label'}" href="{url path="/admin/module/ChronopostPickupPointConst/saveLabel" labelNbr=$LABEL_NBR labelDir=$LABEL_DIR}">
+                                                        <a class="btn btn-default btn-xs js-export-download" title="{intl l='Download this label'}" href="{url path="/admin/module/ChronopostPickupPoint/saveLabel" labelNbr=$LABEL_NBR labelDir=$LABEL_DIR}">
                                                             <span class="glyphicon glyphicon-floppy-disk"></span>
                                                         </a>
                                                     </td>

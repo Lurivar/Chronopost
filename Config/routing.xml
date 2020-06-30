@@ -4,15 +4,15 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="chronopost.pickup.point.config.save" path="/admin/module/ChronopostPickupPointConst/config" methods="post">
+    <route id="chronopost.pickup.point.config.save" path="/admin/module/ChronopostPickupPoint/config" methods="post">
         <default key="_controller">ChronopostPickupPoint\Controller\ChronopostPickupPointBackOfficeController::saveAction</default>
     </route>
 
-    <route id="chronopost.pickup.point.configShipper.save" path="/admin/module/ChronopostPickupPointConst/configShipper" methods="post">
+    <route id="chronopost.pickup.point.configShipper.save" path="/admin/module/ChronopostPickupPoint/configShipper" methods="post">
         <default key="_controller">ChronopostPickupPoint\Controller\ChronopostPickupPointBackOfficeController::saveActionShipper</default>
     </route>
 
-    <route id="chronopost.pickup.point.save.label" path="/admin/module/ChronopostPickupPointConst/saveLabel">
+    <route id="chronopost.pickup.point.save.label" path="/admin/module/ChronopostPickupPoint/saveLabel">
         <default key="_controller">ChronopostPickupPoint\Controller\ChronopostPickupPointBackOfficeController::saveLabel</default>
     </route>
 

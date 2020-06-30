@@ -1,8 +1,8 @@
 <br>
-<div class="col-md-12 row">
-    <div class="col-md-6 panel panel-default">
+<div class="col-md-12 row table" style="display: flex">
+    <div class="col-md-6 panel panel-default" style="flex: 1">
         {form name="chronopost_pickup_point_configuration_form" type="chronopost_pickup_point_configuration_form"}
-            <form class="" action="{url path='/admin/module/ChronopostPickupPointConst/config'}" method="post">
+            <form class="" action="{url path='/admin/module/ChronopostPickupPoint/config'}" method="post">
                 <div class="panel-heading">
                     <h4 class="panel-title">{intl l="Chronopost informations"}</h4>
                     {include
@@ -18,11 +18,9 @@
                         <div class="alert alert-danger">{$form_error_message}</div>
                     {/if}
 
-                    {render_form_field field="success_url" value={url path={navigate to="current"}}}
+                    {render_form_field field="success_url" value={url path="/admin/module/ChronopostPickupPoint"}}
 
                     {render_form_field field="chronopost_pickup_point_code"}
-
-                    {render_form_field field="chronopost_pickup_point_code_relais"}
 
                     {render_form_field field="chronopost_pickup_point_label_dir"}
 
@@ -64,9 +62,9 @@
         {/form}
     </div>
 
-    <div class="col-md-6 panel panel-default">
+    <div class="col-md-6 panel panel-default" style="flex: 1">
         {form name="chronopost_pickup_point_configuration_form" type="chronopost_pickup_point_configuration_form"}
-            <form class="" action="{url path='/admin/module/ChronopostPickupPointConst/configShipper'}" method="post">
+            <form class="" action="{url path='/admin/module/ChronopostPickupPoint/configShipper'}" method="post">
                 <div class="panel-heading">
                     <h4 class="panel-title">{intl l="Shipper informations"}</h4>
                     {include
@@ -82,7 +80,7 @@
                         <div class="alert alert-danger">{$form_error_message}</div>
                     {/if}
 
-                    {render_form_field field="success_url" value={url path={navigate to="current"}}}
+                    {render_form_field field="success_url" value={url path="/admin/module/ChronopostPickupPoint"}}
 
                     {render_form_field field="chronopost_pickup_point_shipper_name1"}
 

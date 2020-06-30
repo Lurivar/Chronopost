@@ -380,7 +380,7 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
          *  found, then return the minimum one. Otherwise, the loop should stop after the first iteration.
          */
         /** Get the delivery type of an ongoing order by looking at the request */
-        $deliveryType = self::getDeliveryType($request);
+        $deliveryType = $this->getDeliveryType($request);
 
         /** If no delivery type was found, search again in the session. If none is found again, get
          *  the first one that wasn't already used.
@@ -388,11 +388,11 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
          */
         if (null == $deliveryType) {
             $session = $request->getSession();
-            $deliveryType = self::getDeliveryType($session);
+            $deliveryType = $this->getDeliveryType($session);
         }
 
         /** Check what areas are covered in the shipping zones defined by the admin */
-        $areaIdArray = self::getAllAreasForCountry($country);
+        $areaIdArray = $this->getAllAreasForCountry($country);
         if (empty($areaIdArray)) {
             throw new DeliveryException("Your delivery country is not covered by Chronopost");
         }
@@ -400,22 +400,22 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
         $deliveryArray = null;
 
         if (null == $deliveryType) {
-            $deliveryArray = self::forcePostage($areaIdArray, $cartWeight, $cartAmount);
+            $deliveryArray = $this->forcePostage($areaIdArray, $cartWeight, $cartAmount);
         }
 
         $postage = null;
         if ($deliveryArray !== null) {
             $y = 0;
-            $postage = self::getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryArray[$y]);
+            $postage = $this->getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryArray[$y]);
 
             while (isset($deliveryArray[$y]) && !empty($deliveryArray[$y]) && null !== $deliveryArray[$y]) {
-                if ($postage > self::getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryArray[$y])) {
-                    $postage = self::getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryArray[$y]);
+                if ($postage > $this->getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryArray[$y])) {
+                    $postage = $this->getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryArray[$y]);
                 }
                 $y++;
             }
         } else {
-            if (null === $postage = self::getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryType)) {
+            if (null === $postage = $this->getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryType)) {
                 //$postage = self::getMinPostage($areaIdArray, $cartWeight, $cartAmount, "Chrono13");
                 if (null === $postage) {
                     throw new DeliveryException("Chronopost delivery unavailable for your cart weight or delivery country");

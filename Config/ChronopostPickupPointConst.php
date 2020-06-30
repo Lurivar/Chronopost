@@ -39,13 +39,13 @@ class ChronopostPickupPointConst
     /** @TODO Add other delivery types  */
 
     /** WSDL for the Chronopost Shipping Service */
-    const CHRONOPOST_PICKUP_POINT_SHIPPING_SERVICE_WSDL              = "https://ws.chronopost.pickup.point.fr/shipping-cxf/ShippingServiceWS?wsdl";
-    const CHRONOPOST_PICKUP_POINT_RELAY_SEARCH_SERVICE_WSDL          = "https://ws.chronopost.pickup.point.fr/recherchebt-ws-cxf/PointRelaisServiceWS?wsdl";
-    const CHRONOPOST_PICKUP_POINT_COORDINATES_SERVICE_WSDL           = "https://ws.chronopost.pickup.point.fr/rdv-cxf/services/CreneauServiceWS?wsdl";
+    const CHRONOPOST_PICKUP_POINT_SHIPPING_SERVICE_WSDL              = "https://ws.chronopost.fr/shipping-cxf/ShippingServiceWS?wsdl";
+    const CHRONOPOST_PICKUP_POINT_RELAY_SEARCH_SERVICE_WSDL          = "https://ws.chronopost.fr/recherchebt-ws-cxf/PointRelaisServiceWS?wsdl";
+    const CHRONOPOST_PICKUP_POINT_COORDINATES_SERVICE_WSDL           = "https://ws.chronopost.fr/rdv-cxf/services/CreneauServiceWS?wsdl";
     /** @TODO Add other WSDL config key */
 
     /** @Unused */
-    const CHRONOPOST_PICKUP_POINT_TRACKING_URL                   = "https://ws.chronopost.pickup.point.fr/tracking-cxf/TrackingServiceWS/trackSkybillV2";
+    const CHRONOPOST_PICKUP_POINT_TRACKING_URL                   = "https://ws.chronopost.fr/tracking-cxf/TrackingServiceWS/trackSkybillV2";
 
     /** Shipper informations */
     const CHRONOPOST_PICKUP_POINT_SHIPPER_NAME1          = "chronopost_pickup_point_shipper_name1";

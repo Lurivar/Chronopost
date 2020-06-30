@@ -18,8 +18,8 @@ CREATE TABLE `chronopost_pickup_point_order`
     `label_directory` TEXT,
     `label_number` TEXT,
     PRIMARY KEY (`id`),
-    INDEX `fi_order_id` (`order_id`),
-    CONSTRAINT `fk_order_id`
+    INDEX `fi_chronopost_pickup_point_order_order_id` (`order_id`),
+    CONSTRAINT `fk_chronopost_pickup_point_order_order_id`
         FOREIGN KEY (`order_id`)
         REFERENCES `order` (`id`)
         ON UPDATE RESTRICT

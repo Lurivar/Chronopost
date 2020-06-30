@@ -71,8 +71,8 @@ class ChronopostPickupPointFreeShippingController extends BaseAdminController
         return $this->generateRedirectFromRoute(
             "admin.module.configure",
             array(),
-            array (
-                'current_tab'=>'prices_slices_tab_'.$data->get('delivery-mode'),
+            array(
+                'current_tab'=>'prices_slices_tab_' . $data->get('delivery-mode'),
                 'module_code'=>"ChronopostPickupPoint",
                 '_controller' => 'Thelia\\Controller\\Admin\\ModuleController::configureAction',
                 'price_error_id' => null,
@@ -143,7 +143,7 @@ class ChronopostPickupPointFreeShippingController extends BaseAdminController
             "admin.module.configure",
             array(),
             array(
-                'current_tab' => 'prices_slices_tab_' . $data->get('area_freeshipping'),
+                'current_tab' => 'prices_slices_tab_' . $data->get('delivery-mode'),
                 'module_code' => "ChronopostPickupPoint",
                 '_controller' => 'Thelia\\Controller\\Admin\\ModuleController::configureAction',
                 'price_error_id' => null,

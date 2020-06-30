@@ -10,11 +10,11 @@ class BackHook extends BaseHook
 {
     public function onModuleConfiguration(HookRenderEvent $event)
     {
-        $event->add($this->render('ChronopostPickupPointConst/ChronopostPickupPointConfig.html'));
+        $event->add($this->render('ChronopostPickupPoint/ChronopostPickupPointConfig.html'));
     }
 
     public function onModuleConfigJs(HookRenderEvent $event)
     {
-        $event->add($this->render('ChronopostPickupPointConst/module-config-js.html'));
+        $event->add($this->render('ChronopostPickupPoint/module-config-js.html'));
     }
 }
