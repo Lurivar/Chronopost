@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Chronopost\EventListeners;
+namespace ChronopostPickupPoint\EventListeners;
 
 
-use Chronopost\Chronopost;
-use Chronopost\Config\ChronopostConst;
+use ChronopostPickupPoint\ChronopostPickupPoint;
+use ChronopostPickupPoint\Config\ChronopostPickupPointConst;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Thelia\Core\Event\Delivery\PickupLocationEvent;
 use Thelia\Core\Event\TheliaEvents;
@@ -24,7 +24,7 @@ class APIListener implements EventSubscriberInterface
      */
     protected function callWebService(PickupLocationEvent $pickupLocationEvent)
     {
-        $config = ChronopostConst::getConfig();
+        $config = ChronopostPickupPointConst::getConfig();
 
         $datetime = new \DateTime('tomorrow');
         $tomorrow = $datetime->format('d/m/Y');
@@ -39,8 +39,8 @@ class APIListener implements EventSubscriberInterface
 
         /** SHIPPER INFORMATIONS */
         $APIData = [
-            "accountNumber" => $config[ChronopostConst::CHRONOPOST_CODE_CLIENT],
-            "password" => $config[ChronopostConst::CHRONOPOST_PASSWORD],
+            "accountNumber" => $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_CODE_CLIENT],
+            "password" => $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_PASSWORD],
             "adress" => $pickupLocationEvent->getAddress(),
             "zipCode" => $pickupLocationEvent->getZipCode(),
             "city" => $pickupLocationEvent->getCity(),
@@ -58,7 +58,7 @@ class APIListener implements EventSubscriberInterface
         ];
 
         /** Send informations to the Chronopost API */
-        $soapClient = new \SoapClient(ChronopostConst::CHRONOPOST_RELAY_SEARCH_SERVICE_WSDL, array("trace" => 1, "exception" => 1));
+        $soapClient = new \SoapClient(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_RELAY_SEARCH_SERVICE_WSDL, array("trace" => 1, "exception" => 1));
         $response = $soapClient->__soapCall('recherchePointChronopostInterParService', [$APIData]);
 
         if (0 != $response->return->errorCode) {
@@ -121,7 +121,7 @@ class APIListener implements EventSubscriberInterface
             ->setAddress($this->createPickupLocationAddressFromResponse($response))
             ->setLatitude($response->coordGeolocalisationLatitude)
             ->setLongitude($response->coordGeolocalisationLongitude)
-            ->setModuleId(Chronopost::getModuleId())
+            ->setModuleId(ChronopostPickupPoint::getModuleId())
         ;
 
 
@@ -145,7 +145,7 @@ class APIListener implements EventSubscriberInterface
     public function getPickupLocations(PickupLocationEvent $pickupLocationEvent)
     {
         if (null !== $moduleIds = $pickupLocationEvent->getModuleIds()) {
-            if (!in_array(Chronopost::getModuleId(), $moduleIds)) {
+            if (!in_array(ChronopostPickupPoint::getModuleId(), $moduleIds, false)) {
                 return ;
             }
         }

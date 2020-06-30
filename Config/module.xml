@@ -2,20 +2,20 @@
 <module xmlns="http://thelia.net/schema/dic/module"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://thelia.net/schema/dic/module http://thelia.net/schema/dic/module/module-2_2.xsd">
-    <fullnamespace>Chronopost\Chronopost</fullnamespace>
+    <fullnamespace>ChronopostPickupPoint\ChronopostPickupPoint</fullnamespace>
     <descriptive locale="en_US">
-        <title>Chronopost</title>
-        <subtitle>Chronopost delivery module</subtitle>
+        <title>ChronopostPickupPoint</title>
+        <subtitle>Chronopost pickup point delivery module</subtitle>
     </descriptive>
     <descriptive locale="fr_FR">
-        <title>Chronopost</title>
-        <subtitle>Module de livraison Chronopost</subtitle>
+        <title>ChronopostPickupPoint</title>
+        <subtitle>Module de livraison en point relais Chronopost</subtitle>
     </descriptive>
     <languages>
         <language>en_US</language>
         <language>fr_FR</language>
     </languages>
-    <version>1.1.1</version>
+    <version>1.0.0</version>
     <authors>
         <author>
             <name>Thelia</name>

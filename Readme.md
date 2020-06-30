@@ -46,7 +46,7 @@ when a label has been created.
 Labels are automatically created when you put the order on the status ID you entered in the configuration form,
 usually the treatment status.
 ---
-For relay / pickup points, you need to integrate a template to choose one relay in the list provided by the loop 'chronopost.get.relay'.
+For relay / pickup points, you need to integrate a template to choose one relay in the list provided by the loop 'chronopost.pickup.point.get.relay'.
 Ideally from a map, like google maps, yandex, or similar. 
 
 Then, you can either create an entry in the address table and use it immediately,
@@ -55,7 +55,7 @@ from which to get the entire address.
 
 ## Loop
 
-###[chronopost.check.rights]
+###[chronopost.pickup.point.check.rights]
 
 Check if label directory is writable and readable.
 
@@ -72,10 +72,10 @@ None
 
 ### Exemple
 
-```{loop name="yourloopname" type="chronopost.check.rights"}<!-- your template -->{/loop}```
+```{loop name="yourloopname" type="chronopost.pickup.point.check.rights"}<!-- your template -->{/loop}```
 
 
-###[chronopost.delivery.mode]
+###[chronopost.pickup.point.delivery.mode]
 
 ### Input arguments
 
@@ -93,9 +93,9 @@ None
 
 ### Exemple
 
-```{loop name="yourloopname" type="chronopost.delivery.mode"}<!-- your template -->{/loop}```
+```{loop name="yourloopname" type="chronopost.pickup.point.delivery.mode"}<!-- your template -->{/loop}```
 
-###[chronopost.get.relay]
+###[chronopost.pickup.point.get.relay]
 
 Search for pickup points (relays)
 
@@ -135,7 +135,7 @@ Here will be displayed the most important ones
 
 ### Exemple
 
-```{loop name="yourloopname" type="chronopost.delivery.mode"}<!-- your template -->{/loop}```
+```{loop name="yourloopname" type="chronopost.pickup.point.delivery.mode"}<!-- your template -->{/loop}```
 
 
 ###[chronopost]
@@ -160,7 +160,7 @@ Here will be displayed the most important ones
 
 ```{loop name="chronopost" type="socolissimo"}<!-- your template -->{/loop}```
 
-###[chronopost.area.freeshipping]
+###[chronopost.pickup.point.area.freeshipping]
 
 ### Input arguments
 
@@ -179,9 +179,9 @@ Here will be displayed the most important ones
 
 ### Exemple
 
-```{loop name="chronopost.area.freeshipping" type="socolissimo"}<!-- your template -->{/loop}```
+```{loop name="chronopost.pickup.point.area.freeshipping" type="socolissimo"}<!-- your template -->{/loop}```
 
-###[chronopost.export.label]
+###[chronopost.pickup.point.export.label]
 
 ### Input arguments
 
@@ -206,7 +206,7 @@ Here will be displayed the most important ones
 
 ### Exemple
 
-```{loop name="chronopost.area.freeshipping" type="socolissimo"}<!-- your template -->{/loop}```
+```{loop name="chronopost.pickup.point.area.freeshipping" type="socolissimo"}<!-- your template -->{/loop}```
 
 ##Integration
 

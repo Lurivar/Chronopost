@@ -4,12 +4,12 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
--- chronopost_order
+-- chronopost_pickup_point_order
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `chronopost_order`;
+DROP TABLE IF EXISTS `chronopost_pickup_point_order`;
 
-CREATE TABLE `chronopost_order`
+CREATE TABLE `chronopost_pickup_point_order`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `order_id` INTEGER NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE `chronopost_order`
     `label_directory` TEXT,
     `label_number` TEXT,
     PRIMARY KEY (`id`),
-    INDEX `FI_order_id` (`order_id`),
+    INDEX `fi_order_id` (`order_id`),
     CONSTRAINT `fk_order_id`
         FOREIGN KEY (`order_id`)
         REFERENCES `order` (`id`)
@@ -27,12 +27,12 @@ CREATE TABLE `chronopost_order`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- chronopost_delivery_mode
+-- chronopost_pickup_point_delivery_mode
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `chronopost_delivery_mode`;
+DROP TABLE IF EXISTS `chronopost_pickup_point_delivery_mode`;
 
-CREATE TABLE `chronopost_delivery_mode`
+CREATE TABLE `chronopost_pickup_point_delivery_mode`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255),
@@ -43,12 +43,12 @@ CREATE TABLE `chronopost_delivery_mode`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- chronopost_price
+-- chronopost_pickup_point_price
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `chronopost_price`;
+DROP TABLE IF EXISTS `chronopost_pickup_point_price`;
 
-CREATE TABLE `chronopost_price`
+CREATE TABLE `chronopost_pickup_point_price`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `area_id` INTEGER NOT NULL,
@@ -58,43 +58,43 @@ CREATE TABLE `chronopost_price`
     `franco_min_price` FLOAT,
     `price` FLOAT NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `FI_chronopost_price_area_id` (`area_id`),
-    INDEX `FI_chronopost_price_delivery_mode_id` (`delivery_mode_id`),
-    CONSTRAINT `fk_chronopost_price_area_id`
+    INDEX `fi_chronopost_pickup_point_price_area_id` (`area_id`),
+    INDEX `fi_chronopost_pickup_point_price_delivery_mode_id` (`delivery_mode_id`),
+    CONSTRAINT `fk_chronopost_pickup_point_price_area_id`
         FOREIGN KEY (`area_id`)
         REFERENCES `area` (`id`)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT,
-    CONSTRAINT `fk_chronopost_price_delivery_mode_id`
+    CONSTRAINT `fk_chronopost_pickup_point_price_delivery_mode_id`
         FOREIGN KEY (`delivery_mode_id`)
-        REFERENCES `chronopost_delivery_mode` (`id`)
+        REFERENCES `chronopost_pickup_point_delivery_mode` (`id`)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- chronopost_area_freeshipping
+-- chronopost_pickup_point_area_freeshipping
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `chronopost_area_freeshipping`;
+DROP TABLE IF EXISTS `chronopost_pickup_point_area_freeshipping`;
 
-CREATE TABLE `chronopost_area_freeshipping`
+CREATE TABLE `chronopost_pickup_point_area_freeshipping`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `area_id` INTEGER NOT NULL,
     `delivery_mode_id` INTEGER NOT NULL,
     `cart_amount` DECIMAL(16,6) DEFAULT 0.000000,
     PRIMARY KEY (`id`),
-    INDEX `FI_chronopost_area_freeshipping_area_id` (`area_id`),
-    INDEX `FI_chronopost_area_freeshipping_delivery_mode_id` (`delivery_mode_id`),
-    CONSTRAINT `fk_chronopost_area_freeshipping_area_id`
+    INDEX `fi_chronopost_pickup_point_area_freeshipping_area_id` (`area_id`),
+    INDEX `fi_chronopost_pickup_point_area_freeshipping_delivery_mode_id` (`delivery_mode_id`),
+    CONSTRAINT `fk_chronopost_pickup_point_area_freeshipping_area_id`
         FOREIGN KEY (`area_id`)
         REFERENCES `area` (`id`)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT,
-    CONSTRAINT `fk_chronopost_area_freeshipping_delivery_mode_id`
+    CONSTRAINT `fk_chronopost_pickup_point_area_freeshipping_delivery_mode_id`
         FOREIGN KEY (`delivery_mode_id`)
-        REFERENCES `chronopost_delivery_mode` (`id`)
+        REFERENCES `chronopost_pickup_point_delivery_mode` (`id`)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ) ENGINE=InnoDB;

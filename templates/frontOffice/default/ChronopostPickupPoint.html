@@ -1,0 +1,181 @@
+{loop type="chronopost.pickup.point.get.relay" name="chronopost-relay" orderweight="1000" countryid="64" zipcode="69003" city="Lyon" address="7 rue de la rize"}
+{/loop}
+
+
+{loop type="delivery" name="chronopost" id=$module force_return="true"}
+    <tr style="display: none;">
+        <td colspan="3">
+            <div id="point-chronopost">
+                <div id="deliverytype-chronopost">
+
+                    {chronopostPickupPointDeliveryType}
+
+
+                    {* Chrono13 *}
+                    {if $isChrono13Enabled !== false}
+                    {chronopostPickupPointDeliveryPrice delivery-mode="01" country=$country}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{intl l="Chrono 13H delivery" d='chronopost.pickup.point.fo.default'}</strong> / {$chronopostPickupPointDeliveryModePrice} {currency attr="symbol"}
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+
+                                <div style="padding-top: 15px;">
+                                    {intl l="Delivery to you or a personal address of your choice, before tomorrow 13H." d='chronopost.pickup.point.fo.default'}
+
+                                    <div class="clearfix">
+                                        <button type="submit" name="chronopost-chrono13" value="CHRONO13" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {* Chrono18 *}
+                    {if $isChrono18Enabled !== false}
+                    {chronopostPickupPointDeliveryPrice delivery-mode="16" country=$country}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{intl l="Chrono 18H delivery" d='chronopost.pickup.point.fo.default'}</strong> / {$chronopostPickupPointDeliveryModePrice} {currency attr="symbol"}
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+
+                                <div style="padding-top: 15px;">
+                                    {intl l="Delivery to you or a personal address of your choice, before tomorrow 18H." d='chronopost.pickup.point.fo.default'}
+
+                                    <div class="clearfix">
+                                        <button type="submit" name="chronopost-chrono18" value="CHRONO18" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {* Chrono13Bal *}
+                    {if $isChrono13BalEnabled !== false}
+                    {chronopostPickupPointDeliveryPrice delivery-mode="58" country=$country}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{intl l="Chrono 13H relay delivery" d='chronopost.pickup.point.fo.default'}</strong> / {$chronopostPickupPointDeliveryModePrice} {currency attr="symbol"}
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+
+                                <div style="padding-top: 15px;">
+                                    {intl l="Delivery in a relay of your choice, before tomorrow 13H." d='chronopost.pickup.point.fo.default'}
+
+                                    <div class="clearfix">
+                                        <button type="submit" name="chronopost-chrono13bal" value="CHRONO13BAL" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {* Chrono Classic *}
+                    {if $isChronoClassicEnabled !== false}
+                    {chronopostPickupPointDeliveryPrice delivery-mode="44" country=$country}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{intl l="Chrono Europe Classic delivery" d='chronopost.pickup.point.fo.default'}</strong> / {$chronopostPickupPointDeliveryModePrice} {currency attr="symbol"}
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+
+                                <div style="padding-top: 15px;">
+                                    {intl l="Delivery to you or a personal address of your choice, anywhere in Europe." d='chronopost.pickup.point.fo.default'}
+
+                                    <div class="clearfix">
+                                        <button type="submit" name="chronopost-chronoclassic" value="CHRONOCLASSIC" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {* Chrono Express *}
+                    {if $isChronoExpressEnabled !== false}
+                    {chronopostPickupPointDeliveryPrice delivery-mode="17" country=$country}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{intl l="Chrono Europe Express delivery" d='chronopost.pickup.point.fo.default'}</strong> / {$chronopostPickupPointDeliveryModePrice} {currency attr="symbol"}
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+
+                                <div style="padding-top: 15px;">
+                                    {intl l="Delivery to you or a personal address of your choice, anywhere in Europe in less than 3 days." d='chronopost.pickup.point.fo.default'}
+
+                                    <div class="clearfix">
+                                        <button type="submit" name="chronopost-chronoexpress" value="CHRONOEXPRESS" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+
+                    {* Fresh13 *}
+                    {if $isFresh13Enabled !== false}
+                    {chronopostPickupPointDeliveryPrice delivery-mode="2R" country=$country}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{intl l="Fresh 13H delivery" d='chronopost.pickup.point.fo.default'}</strong> / {$chronopostPickupPointDeliveryModePrice} {currency attr="symbol"}
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+
+                                <div style="padding-top: 15px;">
+                                    {intl l="Delivery of fresh products before 13H tomorrow." d='chronopost.pickup.point.fo.default'}
+
+                                    <div class="clearfix">
+                                        <button type="submit" name="chronopost-fresh13" value="FRESH13" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {* TODO Add other delivery types *}
+
+                </div>
+            </div>
+        </td>
+    </tr>
+
+    <script>
+        function displayContent () {
+            $("#deliverytype-chronopost").closest('tr').show(function () {
+                $('.btn-checkout-next').hide();
+            });
+        }
+
+        $(function(){
+
+            if ($("#delivery-method_{$module}").is(':checked')) {
+                displayContent();
+            }
+
+            $('[name="thelia_order_delivery[delivery-module]"]', '.table-delivery').on('change', function(){
+                if($(this).attr('id') != 'delivery-method_{$module}') {
+                    $("#deliverytype-chronopost").closest('tr').hide();
+                    $('.btn-checkout-next').show();
+                } else {
+                    displayContent();
+                }
+            });
+
+        });
+    </script>
+{/loop}

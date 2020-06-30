@@ -5,43 +5,43 @@
         xsi:schemaLocation="http://thelia.net/schema/dic/config http://thelia.net/schema/dic/config/thelia-1.0.xsd">
 
     <loops>
-        <loop class="Chronopost\Loop\ChronopostCheckRightsLoop" name="chronopost.check.rights" />
-        <loop class="Chronopost\Loop\ChronopostDeliveryMode" name="chronopost.delivery.mode" />
-        <loop class="Chronopost\Loop\ChronopostLoop" name="chronopost" />
-        <loop class="Chronopost\Loop\ChronopostAreaFreeshipping" name="chronopost.area.freeshipping" />
-        <loop class="Chronopost\Loop\ChronopostExportLabelLoop" name="chronopost.export.label" />
-        <loop class="Chronopost\Loop\ChronopostGetRelay" name="chronopost.get.relay" />
+        <loop class="ChronopostPickupPoint\Loop\ChronopostPickupPointCheckRightsLoop" name="chronopost.pickup.point.check.rights" />
+        <loop class="ChronopostPickupPoint\Loop\ChronopostPickupPointDeliveryMode" name="chronopost.pickup.point.delivery.mode" />
+        <loop class="ChronopostPickupPoint\Loop\ChronopostPickupPointLoop" name="chronopost" />
+        <loop class="ChronopostPickupPoint\Loop\ChronopostPickupPointAreaFreeshipping" name="chronopost.pickup.point.area.freeshipping" />
+        <loop class="ChronopostPickupPoint\Loop\ChronopostPickupPointExportLabelLoop" name="chronopost.pickup.point.export.label" />
+        <loop class="ChronopostPickupPoint\Loop\ChronopostPickupPointGetRelay" name="chronopost.pickup.point.get.relay" />
     </loops>
 
     <forms>
-        <form name="chronopost_configuration_form" class="Chronopost\Form\ChronopostConfigurationForm" />
-        <form name="chronopost.freeshipping.form" class="Chronopost\Form\ChronopostFreeShippingForm" />
-        <form name="chronopost.add.price.form" class="Chronopost\Form\ChronopostAddPriceForm" />
-        <form name="chronopost.update.price.form" class="Chronopost\Form\ChronopostUpdatePriceForm" />
+        <form name="chronopost_pickup_point_configuration_form" class="ChronopostPickupPoint\Form\ChronopostPickupPointConfigurationForm" />
+        <form name="chronopost.pickup.point.freeshipping.form" class="ChronopostPickupPoint\Form\ChronopostPickupPointFreeShippingForm" />
+        <form name="chronopost.pickup.point.add.price.form" class="ChronopostPickupPoint\Form\ChronopostPickupPointAddPriceForm" />
+        <form name="chronopost.pickup.point.update.price.form" class="ChronopostPickupPoint\Form\ChronopostPickupPointUpdatePriceForm" />
     </forms>
 
     <services>
-        <service id="hook.order.module.chronopost" class="Chronopost\EventListeners\SetDeliveryType" scope="request">
+        <service id="hook.order.module.chronopost" class="ChronopostPickupPoint\EventListeners\SetDeliveryType" scope="request">
             <argument type="service" id="request"/>
             <tag name="kernel.event_subscriber"/>
         </service>
-        <service id="chronopost.deliverytype.smarty.plugin" class="Chronopost\Smarty\Plugins\ChronopostDeliveryType" scope="request">
+        <service id="chronopost.pickup.point.deliverytype.smarty.plugin" class="ChronopostPickupPoint\Smarty\Plugins\ChronopostPickupPointDeliveryType" scope="request">
             <argument type="service" id="request" />
             <argument type="service" id="event_dispatcher"/>
             <tag name="thelia.parser.register_plugin" />
         </service>
-        <service id="api.chronopost.pickup.point" class="Chronopost\EventListeners\APIListener" scope="request">
+        <service id="api.chronopost.pickup.point.pickup.point" class="ChronopostPickupPoint\EventListeners\APIListener" scope="request">
             <tag name="kernel.event_subscriber"/>
         </service>
     </services>
 
 
     <hooks>
-        <hook id="chronopost.hook.back" class="Chronopost\Hook\BackHook">
+        <hook id="chronopost.pickup.point.hook.back" class="ChronopostPickupPoint\Hook\BackHook">
             <tag name="hook.event_listener" event="module.configuration" type="back" method="onModuleConfiguration" />
             <tag name="hook.event_listener" event="module.config-js" type="back" method="onModuleConfigJs" />
         </hook>
-        <hook id="chronopost.hook.front" class="Chronopost\Hook\FrontHook" scope="request">
+        <hook id="chronopost.pickup.point.hook.front" class="ChronopostPickupPoint\Hook\FrontHook" scope="request">
             <tag name="hook.event_listener" event="order-delivery.extra" />
         </hook>
     </hooks>
