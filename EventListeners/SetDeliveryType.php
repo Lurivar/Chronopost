@@ -67,32 +67,14 @@ class SetDeliveryType implements EventSubscriberInterface
 
             $orderId = $orderEvent->getOrder()->getId();
 
-            if ($request->getSession()->get('ChronopostPickupPointDeliveryFresh13') == 1) {
-                $chronopostOrder
-                    ->setDeliveryType("Fresh13")
-                    ->setDeliveryCode("2R");
-            } elseif ($request->getSession()->get('ChronopostPickupPointDeliveryChrono13') == 1) {
-                $chronopostOrder
-                    ->setDeliveryType("Chrono13")
-                    ->setDeliveryCode("01");
-            } elseif ($request->getSession()->get('ChronopostPickupPointDeliveryChrono18') == 1) {
-                $chronopostOrder
-                    ->setDeliveryType("Chrono18")
-                    ->setDeliveryCode("16");
-            } elseif ($request->getSession()->get('ChronopostPickupPointDeliveryChrono13Bal') == 1) {
-                $chronopostOrder
-                    ->setDeliveryType("Chrono13Bal")
-                    ->setDeliveryCode("56");
-            } elseif ($request->getSession()->get('ChronopostPickupPointDeliveryChronoClassic') == 1) {
-                $chronopostOrder
-                    ->setDeliveryType("ChronoClassic")
-                    ->setDeliveryCode("44");
-            } elseif ($request->getSession()->get('ChronopostPickupPointDeliveryChronoExpress') == 1) {
-                $chronopostOrder
-                    ->setDeliveryType("ChronoExpress")
-                    ->setDeliveryCode("17");
+            foreach (ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CODES as $name => $code) {
+                if (strtoupper($name) === $request->getSession()->get('ChronopostPickupPointDeliveryType')) {
+                    $chronopostOrder
+                        ->setDeliveryType($name)
+                        ->setDeliveryCode($code)
+                    ;
+                }
             }
-            /** @TODO Add other delivery types */
 
             $chronopostOrder
                 ->setOrderId($orderId)
@@ -111,23 +93,11 @@ class SetDeliveryType implements EventSubscriberInterface
         if ($this->checkModule($orderEvent->getDeliveryModule())) {
             $request = $this->getRequest();
 
-            /** @TODO Add other delivery types */
-            $isChrono13BalEnabled = $request->get('chronopost-chrono13bal');
-
-            $request->getSession()->set('ChronopostAddressId', 0);
-            $request->getSession()->set('ChronopostPickupPointDeliveryChrono13Bal', 0);
-
             $request->getSession()->set('ChronopostAddressId', $orderEvent->getDeliveryAddress());
-
-            if ($isChrono13BalEnabled) {
-                $request->getSession()->set('ChronopostPickupPointDeliveryChrono13Bal', 1);
-            } else {
-                return;
-            }
-            /** @TODO END */
+            $request->getSession()->set('ChronopostPickupPointDeliveryType', $request->get('chronopost-pickup-point-delivery-mode'));
         }
 
-        return;
+        return ;
     }
 
     /**
