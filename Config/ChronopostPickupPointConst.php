@@ -15,7 +15,6 @@ class ChronopostPickupPointConst
         "Chrono18"      => "16",
         "ChronoExpress" => "17",
         "ChronoClassic" => "44",
-        "Chrono13Bal"   => "58",
         "Fresh13"       => "2R",
     ];
     /** @TODO Add other delivery types */
