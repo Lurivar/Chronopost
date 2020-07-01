@@ -38,16 +38,7 @@ class ChronopostPickupPointConst
 
     /** Days before fresh products expiration after processing */
     const CHRONOPOST_PICKUP_POINT_EXPIRATION_DATE                = "chronopost_pickup_point_expiration_date";
-
-    /** Status of the delivery types. Enabled|Disabled */
-    const CHRONOPOST_PICKUP_POINT_FRESH_DELIVERY_13_STATUS       = "chronopost_pickup_point_fresh_delivery_13_status";
-    const CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_STATUS      = "chronopost_pickup_point_delivery_chrono_13_status";
-    const CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_18_STATUS      = "chronopost_pickup_point_delivery_chrono_18_status";
-    const CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_BAL_STATUS  = "chronopost_pickup_point_delivery_chrono_13_bal_status";
-    const CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_CLASSIC_STATUS = "chronopost_pickup_point_delivery_chrono_classic_status";
-    const CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_EXPRESS_STATUS = "chronopost_pickup_point_delivery_chrono_express_status";
-    /** @TODO Add other delivery types  */
-
+    
     /** WSDL for the Chronopost Shipping Service */
     const CHRONOPOST_PICKUP_POINT_SHIPPING_SERVICE_WSDL              = "https://ws.chronopost.fr/shipping-cxf/ShippingServiceWS?wsdl";
     const CHRONOPOST_PICKUP_POINT_RELAY_SEARCH_SERVICE_WSDL          = "https://ws.chronopost.fr/recherchebt-ws-cxf/PointRelaisServiceWS?wsdl";
@@ -159,6 +150,9 @@ class ChronopostPickupPointConst
         return self::$config;
     }
 
+    /** Status keys of the delivery types.
+     *  @return array
+     */
     public static function getDeliveryTypesStatusKeys()
     {
         $statusKeys = [];
