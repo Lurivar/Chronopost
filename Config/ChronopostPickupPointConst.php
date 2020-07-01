@@ -11,12 +11,7 @@ class ChronopostPickupPointConst
 {
     /** Delivery types Name => Code */
     const CHRONOPOST_PICKUP_POINT_DELIVERY_CODES = [
-        "Chrono13"      => "1",
-        "Chrono18"      => "16",
-        "ChronoExpress" => "17",
-        "ChronoClassic" => "44",
         "Chrono13Bal"   => "58",
-        "Fresh13"       => "2R",
     ];
     /** @TODO Add other delivery types */
 
@@ -38,7 +33,7 @@ class ChronopostPickupPointConst
 
     /** Days before fresh products expiration after processing */
     const CHRONOPOST_PICKUP_POINT_EXPIRATION_DATE                = "chronopost_pickup_point_expiration_date";
-    
+
     /** WSDL for the Chronopost Shipping Service */
     const CHRONOPOST_PICKUP_POINT_SHIPPING_SERVICE_WSDL              = "https://ws.chronopost.fr/shipping-cxf/ShippingServiceWS?wsdl";
     const CHRONOPOST_PICKUP_POINT_RELAY_SEARCH_SERVICE_WSDL          = "https://ws.chronopost.fr/recherchebt-ws-cxf/PointRelaisServiceWS?wsdl";
