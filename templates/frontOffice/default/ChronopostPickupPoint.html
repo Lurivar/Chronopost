@@ -10,10 +10,9 @@
 
                     {chronopostPickupPointDeliveryType}
 
-
                     {* Chrono13 *}
                     {if $isChrono13Enabled !== false}
-                    {chronopostPickupPointDeliveryPrice delivery-mode="01" country=$country}
+                    {chronopostPickupPointDeliveryPrice delivery-mode="1" country=$country}
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <strong>{intl l="Chrono 13H delivery" d='chronopost.pickup.point.fo.default'}</strong> / {$chronopostPickupPointDeliveryModePrice} {currency attr="symbol"}
@@ -25,7 +24,7 @@
                                     {intl l="Delivery to you or a personal address of your choice, before tomorrow 13H." d='chronopost.pickup.point.fo.default'}
 
                                     <div class="clearfix">
-                                        <button type="submit" name="chronopost-chrono13" value="CHRONO13" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                        <button type="submit" name="chronopost-pickup-point-delivery-mode" value="CHRONO13" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
                                     </div>
                                 </div>
 
@@ -48,7 +47,7 @@
                                     {intl l="Delivery to you or a personal address of your choice, before tomorrow 18H." d='chronopost.pickup.point.fo.default'}
 
                                     <div class="clearfix">
-                                        <button type="submit" name="chronopost-chrono18" value="CHRONO18" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                        <button type="submit" name="chronopost-pickup-point-delivery-mode" value="CHRONO18" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
                                     </div>
                                 </div>
 
@@ -71,7 +70,7 @@
                                     {intl l="Delivery in a relay of your choice, before tomorrow 13H." d='chronopost.pickup.point.fo.default'}
 
                                     <div class="clearfix">
-                                        <button type="submit" name="chronopost-chrono13bal" value="CHRONO13BAL" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                        <button type="submit" name="chronopost-pickup-point-delivery-mode" value="CHRONO13BAL" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
                                     </div>
                                 </div>
 
@@ -94,7 +93,7 @@
                                     {intl l="Delivery to you or a personal address of your choice, anywhere in Europe." d='chronopost.pickup.point.fo.default'}
 
                                     <div class="clearfix">
-                                        <button type="submit" name="chronopost-chronoclassic" value="CHRONOCLASSIC" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                        <button type="submit" name="chronopost-pickup-point-delivery-mode" value="CHRONOCLASSIC" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
                                     </div>
                                 </div>
 
@@ -117,7 +116,7 @@
                                     {intl l="Delivery to you or a personal address of your choice, anywhere in Europe in less than 3 days." d='chronopost.pickup.point.fo.default'}
 
                                     <div class="clearfix">
-                                        <button type="submit" name="chronopost-chronoexpress" value="CHRONOEXPRESS" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                        <button type="submit" name="chronopost-pickup-point-delivery-mode" value="CHRONOEXPRESS" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
                                     </div>
                                 </div>
 
@@ -140,7 +139,7 @@
                                     {intl l="Delivery of fresh products before 13H tomorrow." d='chronopost.pickup.point.fo.default'}
 
                                     <div class="clearfix">
-                                        <button type="submit" name="chronopost-fresh13" value="FRESH13" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
+                                        <button type="submit" name="chronopost-pickup-point-delivery-mode" value="FRESH13" class="btn btn-primary pull-right">{intl l="Choose this delivery mode" d="chronopost.pickup.point.fo.default"}</button>
                                     </div>
                                 </div>
                             </div>

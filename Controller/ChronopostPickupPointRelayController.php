@@ -4,12 +4,8 @@
 namespace ChronopostPickupPoint\Controller;
 
 
-use ChronopostPickupPoint\ChronopostPickupPoint;
 use ChronopostPickupPoint\Config\ChronopostPickupPointConst;
-use ChronopostPickupPoint\Model\ChronopostPickupPointOrderQuery;
 use Thelia\Controller\Admin\BaseAdminController;
-use Thelia\Model\Base\OrderAddressQuery;
-use Thelia\Model\Order;
 
 class ChronopostPickupPointRelayController extends BaseAdminController
 {
@@ -31,7 +27,7 @@ class ChronopostPickupPointRelayController extends BaseAdminController
             "city" => $city,
             "countryCode" => $countryCode,
             "type" => 'T',
-            "productCode" => '58',
+            "productCode" => '58', //todo : Make this a variable
             "service" => 'T',
             "weight" => $orderWeight,
             "shippingDate" => $tomorrow,

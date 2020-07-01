@@ -32,13 +32,10 @@ class ChronopostPickupPointDeliveryMode extends BaseLoop implements PropelSearch
         $config = ChronopostPickupPointConst::getConfig();
         $modes = ChronopostPickupPointDeliveryModeQuery::create();
 
-        $enabledDeliveryTypes[] = $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_STATUS] ? "01" : "";
-        $enabledDeliveryTypes[] = $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_FRESH_DELIVERY_13_STATUS] ? "2R" : "";
-        $enabledDeliveryTypes[] = $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_18_STATUS] ? "16" : "";
-        $enabledDeliveryTypes[] = $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_BAL_STATUS] ? "58" : "";
-        $enabledDeliveryTypes[] = $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_CLASSIC_STATUS] ? "44" : "";
-        $enabledDeliveryTypes[] = $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_EXPRESS_STATUS] ? "17" : "";
-        /** @TODO Add other delivery types */
+        $enabledDeliveryTypes = [];
+        foreach (ChronopostPickupPointConst::getDeliveryTypesStatusKeys() as $deliveryTypeName => $statusKey) {
+            $enabledDeliveryTypes[] = $config[$statusKey] ? ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CODES[$deliveryTypeName] : '';
+        }
 
         $modes->filterByCode($enabledDeliveryTypes, Criteria::IN);
 

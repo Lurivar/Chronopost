@@ -31,20 +31,6 @@ class ChronopostPickupPointConfigurationForm extends BaseForm
                     ],
                 ]
             )
-            ->add(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_CODE_CLIENT_RELAIS,
-                "text",
-                [
-                    'required'      => false,
-                    'data'          => $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_CODE_CLIENT_RELAIS],
-                    'label'         => Translator::getInstance()->trans("Chronopost relay client ID"),
-                    'label_attr'    => [
-                        'for'           => 'title',
-                    ],
-                    'attr'          => [
-                        'placeholder'   => Translator::getInstance()->trans("Your Chronopost relay client ID"),
-                    ],
-                ]
-            )
             ->add(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_LABEL_DIR,
                 "text",
                 [
@@ -134,76 +120,6 @@ class ChronopostPickupPointConfigurationForm extends BaseForm
                     ],
                 ]
             )
-
-
-            /** Delivery types */
-            ->add(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_FRESH_DELIVERY_13_STATUS,
-                "checkbox",
-                [
-                    'required'      => false,
-                    'data'          => (bool) $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_FRESH_DELIVERY_13_STATUS],
-                    'label'         => Translator::getInstance()->trans("\"Fresh\" 13h Delivery (Code : 2R)"),
-                    'label_attr'    => [
-                        'for'           => 'title',
-                    ],
-                ]
-            )
-            ->add(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_STATUS,
-                "checkbox",
-                [
-                    'required'      => false,
-                    'data'          => (bool) $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_STATUS],
-                    'label'         => Translator::getInstance()->trans("\"Chrono\" 13h Delivery (Code : 01)"),
-                    'label_attr'    => [
-                        'for'           => 'title',
-                    ],
-                ]
-            )
-            ->add(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_18_STATUS,
-                "checkbox",
-                [
-                    'required'      => false,
-                    'data'          => (bool) $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_18_STATUS],
-                    'label'         => Translator::getInstance()->trans("\"Chrono\" 18h Delivery (Code : 16)"),
-                    'label_attr'    => [
-                        'for'           => 'title',
-                    ],
-                ]
-            )
-            ->add(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_BAL_STATUS,
-                "checkbox",
-                [
-                    'required'      => false,
-                    'data'          => (bool) $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_BAL_STATUS],
-                    'label'         => Translator::getInstance()->trans("\"Chrono\" 13h Relay Delivery (Code : 56)"),
-                    'label_attr'    => [
-                        'for'           => 'title',
-                    ],
-                ]
-            )
-            ->add(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_CLASSIC_STATUS,
-                "checkbox",
-                [
-                    'required'      => false,
-                    'data'          => (bool) $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_CLASSIC_STATUS],
-                    'label'         => Translator::getInstance()->trans("\"Chrono\" Classic Delivery (Code : 44)"),
-                    'label_attr'    => [
-                        'for'           => 'title',
-                    ],
-                ]
-            )
-            ->add(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_EXPRESS_STATUS,
-                "checkbox",
-                [
-                    'required'      => false,
-                    'data'          => (bool) $config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_EXPRESS_STATUS],
-                    'label'         => Translator::getInstance()->trans("\"Chrono\" Classic Delivery (Code : 17)"),
-                    'label_attr'    => [
-                        'for'           => 'title',
-                    ],
-                ]
-            )
-            /** @TODO Add other delivery types */
 
             /** Shipper Informations */
             ->add(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_SHIPPER_NAME1,
@@ -374,9 +290,26 @@ class ChronopostPickupPointConfigurationForm extends BaseForm
                     ],
                 ]
             )
-
-            /** BUILDFORM END */
         ;
+
+        /** Delivery types */
+        foreach (ChronopostPickupPointConst::getDeliveryTypesStatusKeys() as $deliveryTypeName => $statusKey) {
+            $this->formBuilder
+                ->add($statusKey,
+                    "checkbox",
+                    [
+                        'required'      => false,
+                        'data'          => (bool)$config[$statusKey],
+                        'label'         => Translator::getInstance()->trans("\"" . $deliveryTypeName . "\" Delivery (Code : " . ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CODES[$deliveryTypeName] . ")"),
+                        'label_attr'    => [
+                            'for'           => 'title',
+                        ],
+                    ]
+                )
+            ;
+        }
+
+        /** BUILDFORM END */
     }
 
     public function getName()

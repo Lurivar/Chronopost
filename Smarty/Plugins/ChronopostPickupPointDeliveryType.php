@@ -8,6 +8,7 @@ use ChronopostPickupPoint\Config\ChronopostPickupPointConst;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Thelia\Core\HttpFoundation\Request;
+use Thelia\Model\CountryArea;
 use Thelia\Model\CountryQuery;
 use Thelia\Model\Coupon;
 use Thelia\Model\CouponQuery;
@@ -40,6 +41,7 @@ class ChronopostPickupPointDeliveryType extends AbstractSmartyPlugin
         return array(
             new SmartyPluginDescriptor("function", "chronopostPickupPointDeliveryType", $this, "chronopostPickupPointDeliveryType"),
             new SmartyPluginDescriptor("function", "chronopostPickupPointDeliveryPrice", $this, "chronopostPickupPointDeliveryPrice"),
+            new SmartyPluginDescriptor("function", "chronopostPickupPointGetDeliveryTypesStatusKeys", $this, "chronopostPickupPointGetDeliveryTypesStatusKeys"),
         );
     }
 
@@ -58,8 +60,16 @@ class ChronopostPickupPointDeliveryType extends AbstractSmartyPlugin
 
         try {
 
-            $price = ChronopostPickupPoint::getPostageAmount(
-                $country->getAreaId(),
+            $countryAreas = $country->getCountryAreas();
+            $areasArray = [];
+
+            /** @var CountryArea $countryArea */
+            foreach ($countryAreas as $countryArea) {
+                $areasArray[] = $countryArea->getAreaId();
+            }
+
+            $price = (new ChronopostPickupPoint)->getMinPostage(
+                $areasArray,
                 $cartWeight,
                 $cartAmount,
                 $deliveryMode
@@ -94,13 +104,18 @@ class ChronopostPickupPointDeliveryType extends AbstractSmartyPlugin
      */
     public function chronopostPickupPointDeliveryType($params, $smarty)
     {
-        $smarty->assign('isFresh13Enabled', (bool) ChronopostPickupPoint::getConfigValue(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_FRESH_DELIVERY_13_STATUS));
-        $smarty->assign('isChrono13Enabled', (bool) ChronopostPickupPoint::getConfigValue(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_STATUS));
-        $smarty->assign('isChrono18Enabled', (bool) ChronopostPickupPoint::getConfigValue(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_18_STATUS));
-        $smarty->assign('isChrono13BalEnabled', (bool) ChronopostPickupPoint::getConfigValue(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_BAL_STATUS));
-        $smarty->assign('isChronoClassicEnabled', (bool) ChronopostPickupPoint::getConfigValue(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_CLASSIC_STATUS));
-        $smarty->assign('isChronoExpressEnabled', (bool) ChronopostPickupPoint::getConfigValue(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_EXPRESS_STATUS));
-        /** @TODO Add other types of delivery */
+        foreach (ChronopostPickupPointConst::getDeliveryTypesStatusKeys() as $deliveryTypeName => $statusKey) {
+            $smarty->assign('is' . $deliveryTypeName . 'Enabled', (bool)ChronopostPickupPoint::getConfigValue($statusKey));
+        }
+    }
+
+    /**
+     * @param $params
+     * @param $smarty
+     */
+    public function chronopostPickupPointGetDeliveryTypesStatusKeys($params, $smarty)
+    {
+        $smarty->assign('chronopostPickupPointDeliveryTypesStatusKeys', ChronopostPickupPointConst::getDeliveryTypesStatusKeys());
     }
 
 }

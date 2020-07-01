@@ -9,8 +9,18 @@ use Thelia\Model\ConfigQuery;
 
 class ChronopostPickupPointConst
 {
+    /** Delivery types Name => Code */
+    const CHRONOPOST_PICKUP_POINT_DELIVERY_CODES = [
+        "Chrono13"      => "1",
+        "Chrono18"      => "16",
+        "ChronoExpress" => "17",
+        "ChronoClassic" => "44",
+        "Chrono13Bal"   => "58",
+        "Fresh13"       => "2R",
+    ];
+    /** @TODO Add other delivery types */
+
     /** Chronopost shipper identifiers */
-    const CHRONOPOST_PICKUP_POINT_CODE_CLIENT_RELAIS             = "chronopost_pickup_point_code_relais";
     const CHRONOPOST_PICKUP_POINT_CODE_CLIENT                    = "chronopost_pickup_point_code";
     const CHRONOPOST_PICKUP_POINT_PASSWORD                       = "chronopost_pickup_point_password";
 
@@ -81,7 +91,6 @@ class ChronopostPickupPointConst
     {
         $config = [
             /** Chronopost basic informations */
-            self::CHRONOPOST_PICKUP_POINT_CODE_CLIENT_RELAIS         => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_CODE_CLIENT_RELAIS),
             self::CHRONOPOST_PICKUP_POINT_CODE_CLIENT                => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_CODE_CLIENT),
             self::CHRONOPOST_PICKUP_POINT_LABEL_DIR                  => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_LABEL_DIR),
             self::CHRONOPOST_PICKUP_POINT_LABEL_TYPE                 => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_LABEL_TYPE),
@@ -89,15 +98,6 @@ class ChronopostPickupPointConst
             self::CHRONOPOST_PICKUP_POINT_TREATMENT_STATUS           => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_TREATMENT_STATUS),
             self::CHRONOPOST_PICKUP_POINT_PRINT_AS_CUSTOMER_STATUS   => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_PRINT_AS_CUSTOMER_STATUS),
             self::CHRONOPOST_PICKUP_POINT_EXPIRATION_DATE            => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_EXPIRATION_DATE),
-
-            /** Delivery types */
-            self::CHRONOPOST_PICKUP_POINT_FRESH_DELIVERY_13_STATUS   => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_FRESH_DELIVERY_13_STATUS),
-            self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_STATUS  => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_STATUS),
-            self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_18_STATUS  => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_18_STATUS),
-            self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_BAL_STATUS  => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_BAL_STATUS),
-            self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_CLASSIC_STATUS  => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_CLASSIC_STATUS),
-            self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_EXPRESS_STATUS  => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_EXPRESS_STATUS),
-            /** @TODO Add other delivery types */
 
             /** Shipper informations */
             self::CHRONOPOST_PICKUP_POINT_SHIPPER_NAME1              => ChronopostPickupPoint::getConfigValue(self::CHRONOPOST_PICKUP_POINT_SHIPPER_NAME1),
@@ -115,6 +115,11 @@ class ChronopostPickupPointConst
 
             /** END */
         ];
+
+        /** Delivery types */
+        foreach (self::getDeliveryTypesStatusKeys() as $statusKey) {
+            $config[$statusKey] = ChronopostPickupPoint::getConfigValue($statusKey);
+        }
 
         /** Add a / to the end of the path for the label directory if it wasn't added manually */
         if (substr($config[self::CHRONOPOST_PICKUP_POINT_LABEL_DIR], -1) !== '/') {
@@ -154,5 +159,14 @@ class ChronopostPickupPointConst
         return self::$config;
     }
 
+    public static function getDeliveryTypesStatusKeys()
+    {
+        $statusKeys = [];
 
+        foreach (self::CHRONOPOST_PICKUP_POINT_DELIVERY_CODES as $name => $code) {
+            $statusKeys[$name] = 'chronopost_pickup_point_delivery_' . strtolower($name) . '_status';
+        }
+
+        return $statusKeys;
+    }
 }

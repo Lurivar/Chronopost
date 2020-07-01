@@ -51,8 +51,8 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
             $database->insertSql(null, array(__DIR__ . '/Config/thelia.sql'));
         }
 
+        /** Default config values */
         $defaultConfig = [
-            ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_CODE_CLIENT_RELAIS => null,
             ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_CODE_CLIENT => null,
             ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_LABEL_DIR => THELIA_LOCAL_DIR . 'chronopost',
             ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_LABEL_TYPE => "PDF",
@@ -60,14 +60,6 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
             ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_TREATMENT_STATUS => "3",
             ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_PRINT_AS_CUSTOMER_STATUS => "N",
             ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_EXPIRATION_DATE => null,
-
-            ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_FRESH_DELIVERY_13_STATUS => false,
-            ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_STATUS => false,
-            ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_18_STATUS => false,
-            ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_BAL_STATUS => false,
-            ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_CLASSIC_STATUS => false,
-            ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_EXPRESS_STATUS => false,
-            /** @TODO Add other delivery types */
 
             ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_SHIPPER_NAME1 => null,
             ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_SHIPPER_NAME2 => null,
@@ -83,32 +75,29 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
             ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_SHIPPER_MAIL => ConfigQuery::read("store_email"),
         ];
 
-        /** Set the default config values in the DB table */
+        /** Defaults the delivery types status as false */
+        foreach (ChronopostPickupPointConst::getDeliveryTypesStatusKeys() as $statusKey) {
+            $defaultConfig[$statusKey] = false;
+        }
+
+        /** Set the default config values in the DB table if it doesn't exists yet */
         foreach ($defaultConfig as $key => $value) {
             if (null === self::getConfigValue($key, null)) {
                 self::setConfigValue($key, $value);
             }
         }
 
-        /** Check if the path given is a directory, create it otherwise */
+        /** Check if the path given is a directory, creates it otherwise */
         $dir = self::getConfigValue(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_LABEL_DIR, null);
         $fs = new Filesystem();
         if (!is_dir($dir)) {
             $fs->mkdir($dir);
         }
 
-        /** @TODO : Add other delivery types code and titles */
-        $deliveryTypes = [
-            "01" => "Chrono13",
-            "2R" => "Fresh13",
-            "16" => "Chrono18",
-            "58" => "Chrono13Bal",
-            "44" => "ChronoClassic",
-            "17" => "ChronoExpress",
-        ];
-
-        /** Set the delivery types as not enabled when activating the module for the first time */
-        foreach ($deliveryTypes as $code => $title) {
+        /** Set the delivery types as not enabled in the ChronopostPickupPointDeliveryMode table
+         * when activating the module for the first time
+         */
+        foreach (ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CODES as $title => $code) {
             if (null === $this->isDeliveryTypeSet($code)) {
                 $this->setDeliveryType($code, $title);
             }
@@ -178,31 +167,16 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
      * Return the delivery type of an ongoing order.
      *
      * @param Request|Session $request
-     * @param boolean $continue
      * @return null|string
      */
     public function getDeliveryType($request)
     {
-        $fresh13 = $request->get('chronopost-fresh13');
-        $chrono13 = $request->get('chronopost-chrono13');
-        $chrono18 = $request->get('chronopost-chrono18');
-        $chrono13Bal = $request->get('chronopost-chrono13bal');
-        $chronoClassic = $request->get('chronopost-chronoclassic');
-        $chronoExpress = $request->get('chronopost-chronoexpress');
-        /** @TODO Add other delivery types here */
+        $deliveryMode = $request->get('chronopost-pickup-point-delivery-mode');
 
-        if ($chrono13) {
-            return "01";
-        } elseif ($fresh13) {
-            return "2R";
-        } elseif ($chrono18) {
-            return "16";
-        } elseif ($chrono13Bal) {
-            return "58";
-        } elseif ($chronoClassic) {
-            return "44";
-        } elseif ($chronoExpress) {
-            return "17";
+        $deliveryCodes = array_change_key_case(ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CODES, CASE_LOWER);
+
+        if ($deliveryMode) {
+            return $deliveryCodes[strtolower($deliveryMode)];
         }
 
         return null;
@@ -214,21 +188,17 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
      * @param $areaId
      * @param $weight
      * @param int $cartAmount
-     * @param null $deliveryType
+     * @param null $deliveryCode
      * @return int
+     * @throws \Exception
      */
-    public static function getPostageAmount($areaId, $weight, $cartAmount = 0, $deliveryType = null)
+    public static function getPostageAmount($areaId, $weight, $cartAmount = 0, $deliveryCode = null)
     {
-        if (null === $deliveryType) {
-            /** If no delivery type was given, take the first one found as default */
-            return null;
-            //$deliveryType = ChronopostPickupPointDeliveryModeQuery::create()->find()->getFirst();
-        } else {
-            $deliveryType = ChronopostPickupPointDeliveryModeQuery::create()->findOneByCode($deliveryType);
+        if (null === $deliveryType = ChronopostPickupPointDeliveryModeQuery::create()->findOneByCode($deliveryCode)) {
+            throw new \Exception("The delivery code given is not supported by the module.");
         }
 
         /** Check if freeshipping is activated for this delivery type */
-
         try {
             $freeShipping = $deliveryType->getFreeshippingActive();
         } catch (\Exception $e) {
@@ -236,7 +206,6 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
         }
 
         /** Get the total cart price needed to have a free shipping for all areas, if it exists */
-
         try {
             $freeShippingFrom = $deliveryType->getFreeshippingFrom();
         } catch (\Exception $er) {
@@ -267,13 +236,15 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
                 ->orderByWeightMax()
                 ->orderByPriceMax();
 
-            /** Find the correct postage price for the cart weight according to the area and delivery mode in $areaPrices*/
-            $firstPrice = $areaPrices->find()
-                ->getFirst();
+            /** Find the correct postage price for the cart weight and price according to the area and delivery mode in $areaPrices*/
+            $firstPrice = $areaPrices
+                ->find()
+                ->getFirst()
+            ;
 
-            /** If no price was found, throw an error */
+            /** If no price was found, return null */
             if (null === $firstPrice) {
-                throw new DeliveryException("Chronopost delivery unavailable for your cart weight or delivery country");
+                return null;
             }
 
             /** Get the minimum price for free shipping in the area of the order */
@@ -292,10 +263,12 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
             if ($cartAmountFreeShipping !== null && $cartAmountFreeShipping <= $cartAmount) {
                 return 0;
             }
+
             $postage = $firstPrice->getPrice();
         } else {
             return 0;
         }
+
         return $postage;
     }
 
@@ -308,59 +281,53 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
      * @param $deliveryType
      * @return int|null
      */
-    private function getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryType)
+    public function getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryType)
     {
         $minPostage = null;
 
         foreach ($areaIdArray as $areaId) {
             try {
                 $postage = self::getPostageAmount($areaId, $cartWeight, $cartAmount, $deliveryType);
+                if (null === $postage) {
+                    continue ;
+                }
                 if ($minPostage === null || $postage < $minPostage) {
                     $minPostage = $postage;
-                    if ($minPostage == 0) {
+                    if ($minPostage === 0) {
                         break;
                     }
                 }
             } catch (\Exception $ex) {
+                throw new DeliveryException($ex->getMessage()); //todo : Make a better catch, duh
             }
+        }
+
+        if (null === $minPostage) {
+            throw new DeliveryException("Chronopost delivery unavailable for your cart weight or delivery country");
         }
 
         return $minPostage;
     }
 
-    public function forcePostage($areaIdArray, $cartWeight, $cartAmount)
+    /**
+     * Return an array of the codes of all delivery types that have been activated
+     * in the backOffice configuration page.
+     *
+     * @return array
+     */
+    public function getActivatedDeliveryTypes()
     {
-        /** @TODO Add other delivery types, or better, change this mess into something better */
         $config = ChronopostPickupPointConst::getConfig();
-        $postageChrono13 = null;
-        $postageFresh13 = null;
-        $postageChrono18 = null;
-        $postageChrono13Bal = null;
-        $postageChronoClassic = null;
-        $postageChronoExpress = null;
+        $deliveryTypes = ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CODES;
+        $activatedDeliveryTypes = [];
 
-        $ret = [];
-
-        if ($config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_STATUS]) {
-            $ret[] = "01";
-        }
-        if ($config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_FRESH_DELIVERY_13_STATUS]) {
-            $ret[] = "2R";
-        }
-        if ($config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_18_STATUS]) {
-            $ret[] = "16";
-        }
-        if ($config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_13_BAL_STATUS]) {
-            $ret[] = "58";
-        }
-        if ($config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_CLASSIC_STATUS]) {
-            $ret[] = "44";
-        }
-        if ($config[ChronopostPickupPointConst::CHRONOPOST_PICKUP_POINT_DELIVERY_CHRONO_EXPRESS_STATUS]) {
-            $ret[] = "17";
+        foreach (ChronopostPickupPointConst::getDeliveryTypesStatusKeys() as $deliveryTypeName => $statusKey) {
+            if (true === (bool)$config[$statusKey]) {
+                $activatedDeliveryTypes[] = $deliveryTypes[$deliveryTypeName];
+            }
         }
 
-        return $ret;
+        return $activatedDeliveryTypes;
     }
 
     /**
@@ -368,6 +335,7 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
      *
      * @param Country $country
      * @return float|int|\Thelia\Model\OrderPostage
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function getPostage(Country $country)
     {
@@ -376,19 +344,22 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
         $cartWeight = $request->getSession()->getSessionCart($this->getDispatcher())->getWeight();
         $cartAmount = $request->getSession()->getSessionCart($this->getDispatcher())->getTaxedAmount($country);
 
-        /** If no delivery type was given, the loop should continue until the postage for each delivery types was
-         *  found, then return the minimum one. Otherwise, the loop should stop after the first iteration.
-         */
+
         /** Get the delivery type of an ongoing order by looking at the request */
         $deliveryType = $this->getDeliveryType($request);
 
-        /** If no delivery type was found, search again in the session. If none is found again, get
-         *  the first one that wasn't already used.
-         *  Otherwise, set @var bool $continue as false so the loop will stop after this iteration.
+        /** If no delivery type was found, search again in the session. */
+        if (null === $deliveryType) {
+            $deliveryType = $this->getDeliveryType($request->getSession());
+        }
+
+        $deliveryArray[] = $deliveryType;
+
+        /** If still no delivery type is found, create an array of all activated delivery types to search
+         *  which one has the lowest delivery price.
          */
-        if (null == $deliveryType) {
-            $session = $request->getSession();
-            $deliveryType = $this->getDeliveryType($session);
+        if (null === $deliveryType) {
+            $deliveryArray = $this->getActivatedDeliveryTypes();
         }
 
         /** Check what areas are covered in the shipping zones defined by the admin */
@@ -397,13 +368,11 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
             throw new DeliveryException("Your delivery country is not covered by Chronopost");
         }
 
-        $deliveryArray = null;
-
-        if (null == $deliveryType) {
-            $deliveryArray = $this->forcePostage($areaIdArray, $cartWeight, $cartAmount);
-        }
-
         $postage = null;
+
+        /** If no delivery type was given, the loop should continue until the postage for each delivery types was
+         *  found, then return the minimum one. Otherwise, the loop should stop after the first iteration.
+         */
         if ($deliveryArray !== null) {
             $y = 0;
             $postage = $this->getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryArray[$y]);
@@ -414,25 +383,21 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
                 }
                 $y++;
             }
-        } else {
-            if (null === $postage = $this->getMinPostage($areaIdArray, $cartWeight, $cartAmount, $deliveryType)) {
-                //$postage = self::getMinPostage($areaIdArray, $cartWeight, $cartAmount, "Chrono13");
-                if (null === $postage) {
-                    throw new DeliveryException("Chronopost delivery unavailable for your cart weight or delivery country");
-                }
-            }
         }
+
+        /** If no postage was found, we throw an exception */
         if (null === $postage) {
             throw new DeliveryException("Chronopost delivery unavailable for your cart weight or delivery country");
         }
+
         /** Get the postage for the shipping zones we've just got */
 
-        /** If delivery is free, set it to a minimal number so the price will still appear. It will be rounded up to 0 */
-        if (0 == $postage) {
-            $postage = 0.000001;
-        }
+        ///** If delivery is free, set it to a minimal number so the price will still appear. It will be rounded up to 0 */
+        //if (0 == $postage) {
+        //    $postage = 0.000001;
+        //}
 
-        return $postage;
+        return (float)$postage;
     }
 
     /**
