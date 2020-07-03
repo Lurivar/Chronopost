@@ -27,6 +27,7 @@ use Thelia\Core\HttpFoundation\Session\Session;
 use Thelia\Install\Database;
 use Thelia\Model\ConfigQuery;
 use Thelia\Model\Country;
+use Thelia\Model\CountryArea;
 use Thelia\Model\ModuleQuery;
 use Thelia\Module\AbstractDeliveryModule;
 use Thelia\Module\BaseModule;
@@ -143,23 +144,33 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
      *
      * @param Country $country
      * @return bool
+     * @throws \Propel\Runtime\Exception\PropelException
      */
     public function isValidDelivery(Country $country)
     {
-        /** @TODO Change to CountryArea which is not deprecated */
-        $areaId = $country->getAreaId();
+        $countryAreas = $country->getCountryAreas();
+        $areasArray = [];
+
+        /** @var CountryArea $countryArea */
+        foreach ($countryAreas as $countryArea) {
+            $areasArray[] = $countryArea->getAreaId();
+        }
 
         $prices = ChronopostPickupPointPriceQuery::create()
-            ->filterByAreaId($areaId)
-            ->findOne();
+            ->filterByAreaId($areasArray)
+            ->findOne()
+        ;
 
         $freeShipping = ChronopostPickupPointDeliveryModeQuery::create()
-            ->findOneByFreeshippingActive(true);
+            ->filterByFreeshippingActive(true)
+            ->findOne()
+        ;
 
         /** Check if Chronopost delivers in the asked area */
         if (null !== $prices || null !== $freeShipping) {
             return true;
         }
+
         return false;
     }
 
