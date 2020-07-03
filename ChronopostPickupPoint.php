@@ -345,6 +345,7 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
      * Return the postage of an ongoing order, or the minimum expected postage before the user chooses what delivery types he wants.
      *
      * @param Country $country
+     * @param null $deliveryType
      * @return float|int|\Thelia\Model\OrderPostage
      * @throws \Propel\Runtime\Exception\PropelException
      */
@@ -412,11 +413,11 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
     }
 
     /**
-     * Returns ids of area containing this country and covers by this module
+     * Returns ids of area containing this country and covered by this module
      * @param Country $country
      * @return array Area ids
      */
-    private function getAllAreasForCountry(Country $country)
+    public function getAllAreasForCountry(Country $country)
     {
         $areaArray = [];
 
