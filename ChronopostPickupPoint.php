@@ -140,7 +140,8 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
     }
 
     /**
-     * Verify if the are asked by the user is in the list of areas added to the shipping zones
+     * Verify if the area asked by the user is in the list of areas added to the shipping zones
+     * and has correctly defined price slices
      *
      * @param Country $country
      * @return bool
@@ -148,6 +149,10 @@ class ChronopostPickupPoint extends AbstractDeliveryModule
      */
     public function isValidDelivery(Country $country)
     {
+        if (empty($this->getAllAreasForCountry($country))) {
+            return false;
+        }
+
         $countryAreas = $country->getCountryAreas();
         $areasArray = [];
 

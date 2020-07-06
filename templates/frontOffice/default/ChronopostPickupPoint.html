@@ -2,11 +2,11 @@
 {/loop}
 
 
-{loop type="delivery" name="chronopost" id=$module force_return="true"}
-    <tr style="display: none;">
+{loop type="delivery" name="chronopost-pickup-point" id=$module force_return="true"}
+    <tr style="display: none;" id="deliverytype-chronopost-pickup-point-tr">
         <td colspan="3">
             <div id="point-chronopost">
-                <div id="deliverytype-chronopost">
+                <div id="deliverytype-chronopost-pickup-point">
 
                     {chronopostPickupPointDeliveryType}
 
@@ -41,8 +41,8 @@
     </tr>
 
     <script>
-        function displayContent () {
-            $("#deliverytype-chronopost").closest('tr').show(function () {
+        function displayContentPickupPoint () {
+            $("#deliverytype-chronopost-pickup-point-tr").show(function () {
                 $('.btn-checkout-next').hide();
             });
         }
@@ -55,10 +55,10 @@
 
             $('[name="thelia_order_delivery[delivery-module]"]', '.table-delivery').on('change', function(){
                 if($(this).attr('id') != 'delivery-method_{$module}') {
-                    $("#deliverytype-chronopost").closest('tr').hide();
+                    $("#deliverytype-chronopost-pickup-point-tr").hide();
                     $('.btn-checkout-next').show();
                 } else {
-                    displayContent();
+                    displayContentPickupPoint();
                 }
             });
 
